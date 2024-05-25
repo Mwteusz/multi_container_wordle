@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  wordle_container:
+    image: wordle_container
+    ports:
+      - "12347:12347"
+
+  mongo_client_container:
+    image: mongo_client_container
+    ports:
+      - "12345:12345"
+
+  dictionary_container:
+    image: dictionary_container
+    ports:
+      - "12122:12122"
+
+  mongo_wordle:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=hunter2
+    ports:
+      - "27017:27017"
