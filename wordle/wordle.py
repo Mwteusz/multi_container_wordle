@@ -146,6 +146,7 @@ def play_wordle(client, token):
             if len(guess) != word_length:
                 response_json = json.dumps({"packet_type":"error", "response": f"Invalid guess, guess must be {word_length} characters long, try again"})
                 client.send(response_json.encode())
+                print("ack: ", client.recv(4096).decode())
                 continue
 
 
@@ -155,24 +156,26 @@ def play_wordle(client, token):
             if result == 0:
                 response_json = json.dumps({"packet_type": "error", "response": f"Word must be {word_length} characters long, try again"})
                 client.send(response_json.encode())
+                print("ack: ", client.recv(4096).decode())
                 continue
             elif result == 1:
                 response_json = json.dumps({"packet_type": "error", "response": "Invalid word, try again"})
                 client.send(response_json.encode())
+                print("ack: ", client.recv(4096).decode())
                 continue
 
             response_json = json.dumps({"packet_type": "wordle_result", "response": result})
             client.send(response_json.encode())
-            #receive ack
-            ack = client.recv(4096).decode()
-            print("ack: ", ack)
+            print("ack: ", client.recv(4096).decode())
 
 
             if is_winner(result):
                 send_gameover(client, token, wordle, win=True)
+                print("ack: ", client.recv(4096).decode())
                 break
             elif len(wordle.guesses) == guesses_number:
                 send_gameover(client, token, wordle, win=False)
+                print("ack: ", client.recv(4096).decode())
                 break
 
 

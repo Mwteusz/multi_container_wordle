@@ -107,11 +107,11 @@ def login(user_info, client):
             response_json = json.dumps({"packet_type": "response", "response": "success", "token": token})
             client.send(response_json.encode())
             print("Login success")
+            return
 
-    else:
-        response_json = json.dumps({"packet_type": "response", "response": "user does not exist, or password is wrong"})
-        client.send(response_json.encode())
-        print("Login failed")
+    response_json = json.dumps({"packet_type": "response", "response": "user does not exist, or password is wrong"})
+    client.send(response_json.encode())
+    print("Login failed")
 
 def get_history(user_info, client):
     try:

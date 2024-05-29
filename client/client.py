@@ -47,7 +47,7 @@ def play_wordle(server_socket, token):
     while True:
         print("Waiting for game response...")
         response_json = server_socket.recv(4096).decode()
-        print(response_json)
+        #print(response_json)
         response = json.loads(response_json)
 
         packet_type = response["packet_type"]
@@ -63,12 +63,15 @@ def play_wordle(server_socket, token):
             send_ack(server_socket)
         elif packet_type == "error":
             print(response["response"])
+            send_ack(server_socket)
         elif packet_type == "game_over":
             print(response["game_over_message"])
             print("The word was: ", response["word"].upper())
+            send_ack(server_socket)
             break
         else:
             print("Invalid packet type: ", packet_type)
+            send_ack(server_socket)
 
 
 def enter_guess(response, server_socket):
@@ -162,7 +165,7 @@ def main():
             user_info = json.dumps({"packet_type": packet_type, "username": username, "password": password})
             server_socket.send(user_info.encode())
             response_json = server_socket.recv(4096).decode()
-            print(response_json)
+            #print(response_json)
             response = json.loads(response_json)
             if response["packet_type"] == "response" and response["response"] == "success":
                 token = response["token"]
